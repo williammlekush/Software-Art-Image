@@ -7,8 +7,8 @@ void ofApp::setup(){
 	y3 = y2;
 
 	x1 = ofRandom(ofGetWindowWidth() * 5 / 12, ofGetWindowWidth() * 7 / 12);
-	x2 = ofRandom(ofGetWindowWidth() * 4 / 12, ofGetWindowWidth() * 8 / 12);
-	x3 = ofRandom(ofGetWindowWidth() * 3 / 12, ofGetWindowWidth() * 9 / 12);
+	x2 = ofRandom(ofGetWindowWidth() * 3 / 12, ofGetWindowWidth() * 9 / 12);
+	x3 = ofRandom(ofGetWindowWidth() * 2 / 12, ofGetWindowWidth() * 10 / 12);
 
 	r1 = 80;
 	r2 = r1 * 1.6 * 1.6;
