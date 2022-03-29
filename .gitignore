@@ -69,7 +69,7 @@ xcuserdata
 *.sln
 *.vcxproj
 *.vcxproj.filters
-*.vsxproj.user
+*.vcxproj.user
 ipch/
 
 # Eclipse
