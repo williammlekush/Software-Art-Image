@@ -30,5 +30,14 @@ class ofApp : public ofBaseApp{
 		int x3;
 		int y3;
 		int r3;
+
+		ofColor keyColor1;
+		ofColor keyColor2;
+		ofColor keyColor3;
+		ofColor keyColor4;
+
+		ofColor color1;
+		ofColor color2;
+		ofColor color3;
 		
 };

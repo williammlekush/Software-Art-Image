@@ -13,6 +13,15 @@ void ofApp::setup(){
 	r1 = 80;
 	r2 = r1 * 1.6 * 1.6;
 	r3 = r2 * 1.6 *1.6;
+
+	ofColor keyColor1(58, 134, 255);
+	ofColor keyColor2(255, 190, 11);
+	ofColor keyColor3(255, 0, 110);
+	ofColor keyColor4(131, 56, 236);
+
+	color1 = keyColor1.lerp(keyColor2, ofRandom(1.0));
+	color2 = color1.lerp(keyColor3, ofRandom(1.0));
+	color3 = color1.lerp(keyColor4, ofRandom(1.0));
 }
 
 //--------------------------------------------------------------
@@ -22,12 +31,12 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofSetColor(255, 50);
-	ofDrawCircle(x1, y1, r1);
-	ofSetColor(255, 100);
-	ofDrawCircle(x2, y2, r2);
-	ofSetColor(255, 150);
+	ofSetColor(color3, 200);
 	ofDrawCircle(x3, y3, r3);
+	ofSetColor(color2, 200);
+	ofDrawCircle(x2, y2, r2);
+	ofSetColor(color1, 200);
+	ofDrawCircle(x1, y1, r1);
 }
 
 //--------------------------------------------------------------
