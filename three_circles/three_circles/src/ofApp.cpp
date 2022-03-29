@@ -2,6 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	ofBackground(50);
 	y3 = ofRandom(ofGetWindowHeight() * 5 / 12, ofGetWindowHeight() * 7 / 12);
 	y2 = ofRandom(ofGetWindowHeight() * 4 / 12, ofGetWindowHeight() * 8 / 12);
 	y1 = ofRandom(ofGetWindowHeight() * 3 / 12, ofGetWindowHeight() * 9 / 12);
