@@ -2,13 +2,13 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	y1 = ofGetWindowHeight() / 2;
-	y2 = y1;
-	y3 = y2;
+	y3 = ofRandom(ofGetWindowHeight() * 5 / 12, ofGetWindowHeight() * 7 / 12);
+	y2 = ofRandom(ofGetWindowHeight() * 4 / 12, ofGetWindowHeight() * 8 / 12);
+	y1 = ofRandom(ofGetWindowHeight() * 3 / 12, ofGetWindowHeight() * 9 / 12);
 
-	x1 = ofRandom(ofGetWindowWidth() * 5 / 12, ofGetWindowWidth() * 7 / 12);
+	x3 = ofRandom(ofGetWindowWidth() * 5 / 12, ofGetWindowWidth() * 7 / 12);
 	x2 = ofRandom(ofGetWindowWidth() * 3 / 12, ofGetWindowWidth() * 9 / 12);
-	x3 = ofRandom(ofGetWindowWidth() * 2 / 12, ofGetWindowWidth() * 10 / 12);
+	x1 = ofRandom(ofGetWindowWidth() * 2 / 12, ofGetWindowWidth() * 10 / 12);
 
 	r1 = 80;
 	r2 = r1 * 1.6 * 1.6;
