@@ -3,7 +3,6 @@
 Generates three related circles. 
 
 - Center positions for each circle are generated randomly within restricted areas around the center
-- Circles are generated within each other by assigning larger circles to smaller areas
 - Harmonious colors are generated through lerping across key colors
 
 ![three-circles-3](https://user-images.githubusercontent.com/56037586/160647089-eaaa6227-5e31-44a0-beca-9990455be74f.JPG)
