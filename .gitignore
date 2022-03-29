@@ -58,6 +58,7 @@ xcuserdata
 *.layout
 
 # Visual Studio
+*/.vs/
 *.sdf
 *.opendb
 *.opensdf
