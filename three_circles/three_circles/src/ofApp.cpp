@@ -2,7 +2,11 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	// dark grey background
 	ofBackground(50);
+
+	// constrain heights to narrower bins than widths
+	// largest circle has smallest range --> circles remain inside each other
 	y3 = ofRandom(ofGetWindowHeight() * 5 / 12, ofGetWindowHeight() * 7 / 12);
 	y2 = ofRandom(ofGetWindowHeight() * 4 / 12, ofGetWindowHeight() * 8 / 12);
 	y1 = ofRandom(ofGetWindowHeight() * 3 / 12, ofGetWindowHeight() * 9 / 12);
@@ -11,15 +15,18 @@ void ofApp::setup(){
 	x2 = ofRandom(ofGetWindowWidth() * 3 / 12, ofGetWindowWidth() * 9 / 12);
 	x1 = ofRandom(ofGetWindowWidth() * 2 / 12, ofGetWindowWidth() * 10 / 12);
 
+	// defining radiuses in terms of window
 	r1 = ofGetWindowHeight() / 9;
 	r2 = r1 * 1.6 * 1.6;
 	r3 = r2 * 1.6 *1.6;
 
+	// declare key colors for lerping
 	ofColor keyColor1(58, 134, 255);
 	ofColor keyColor2(255, 190, 11);
 	ofColor keyColor3(255, 0, 110);
 	ofColor keyColor4(131, 56, 236);
 
+	// use lerping to create color harmonies
 	color1 = keyColor1.lerp(keyColor2, ofRandom(1.0));
 	color2 = color1.lerp(keyColor3, ofRandom(1.0));
 	color3 = color1.lerp(keyColor4, ofRandom(1.0));
@@ -32,6 +39,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	// set color, draw circle, etc.
 	ofSetColor(color3, 200);
 	ofDrawCircle(x3, y3, r3);
 	ofSetColor(color2, 200);
@@ -42,7 +50,6 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
 }
 
 //--------------------------------------------------------------
