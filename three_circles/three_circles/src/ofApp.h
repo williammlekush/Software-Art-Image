@@ -20,5 +20,15 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+		int x1;
+		int y1;
+		int r1;
+		int x2;
+		int y2;
+		int r2;
+		int x3;
+		int y3;
+		int r3;
 		
 };
