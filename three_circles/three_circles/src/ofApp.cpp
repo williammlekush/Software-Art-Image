@@ -39,6 +39,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	ofSetCircleResolution(100);
 	// set color, draw circle, etc.
 	ofSetColor(color3, 200);
 	ofDrawCircle(x3, y3, r3);
