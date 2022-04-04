@@ -26,10 +26,10 @@ class ofApp : public ofBaseApp{
 
 		ofVec2f pos;
 
-		int x;
-		int y;
 		int xChange;
 		int yChange;
 
 		bool out;
+
+
 };

@@ -3,9 +3,6 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	pos = ofVec2f(0, ofRandomHeight());
-
-	x = 0;
-	y = ofRandomHeight();
 	
 	xChange = 1;
 	yChange = 0;
