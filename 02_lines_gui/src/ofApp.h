@@ -40,5 +40,7 @@ class ofApp : public ofBaseApp{
 		ofImage screenshot;
 		bool snapped;
 		int	screenshotCount;
+
+		int speed;
 		
 };

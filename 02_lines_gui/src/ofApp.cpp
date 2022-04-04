@@ -9,14 +9,14 @@ void ofApp::setup() {
 
 	pos = ofVec2f(0, ofRandomHeight());
 
-	xChange = 1;
+	speed = 5;
+
+	xChange = speed;
 	yChange = 0;
 
 	activeLine.addVertex(pos.x, pos.y);
 
 	ofBackground(255);
-
-
 }
 
 //--------------------------------------------------------------
@@ -68,14 +68,20 @@ void ofApp::keyPressed(int key) {
 			xChange = 0;
 			yChange = (int)ofRandom(2);
 			if (yChange == 0) {
-				yChange = -1;
+				yChange = -speed;
+			}
+			else {
+				yChange = speed;
 			}
 		}
 		else {
 			yChange = 0;
 			xChange = (int)ofRandom(2);
 			if (xChange == 0) {
-				xChange = -1;
+				xChange = -speed;
+			}
+			else {
+				xChange = speed;
 			}
 		}
 	}
