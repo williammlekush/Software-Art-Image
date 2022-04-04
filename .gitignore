@@ -23,6 +23,9 @@ openFrameworks-Info.plist
 */bin/*
 !*/bin/data/
 
+
+*/obj/*
+
 #########
 # general
 #########
