@@ -21,4 +21,13 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
+		ofPolyline activeLine;
+		vector<ofPolyline> lines;
+
+		ofVec2f pos;
+
+		int xChange;
+		int yChange;
+
+		bool out;
 };
