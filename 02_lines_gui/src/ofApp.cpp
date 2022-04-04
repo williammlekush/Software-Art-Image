@@ -49,7 +49,6 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	gui.draw();
 	ofSetColor(colorSlider);
 	ofSetLineWidth(thickSlider);
 
@@ -59,6 +58,8 @@ void ofApp::draw() {
 
 	activeLine.draw();
 	activeLine.simplify();
+	gui.draw();
+
 }
 
 //--------------------------------------------------------------
