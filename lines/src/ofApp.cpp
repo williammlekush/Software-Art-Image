@@ -2,17 +2,25 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+	x = 0;
+	y = ofRandomHeight();
+	line.addVertex(x, y);
+	ofBackground(255);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+	x += 1;
+	line.lineTo(x, y);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+	ofColor mainColor;
+	mainColor.setHex(0x4169E1);
+	ofSetColor(mainColor);
+	ofSetLineWidth(3);
+	line.draw();
 }
 
 //--------------------------------------------------------------
