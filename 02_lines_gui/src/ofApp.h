@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -30,4 +31,9 @@ class ofApp : public ofBaseApp{
 		int yChange;
 
 		bool out;
+
+		ofxPanel gui;
+		ofxFloatSlider thickSlider;
+		ofxLabel rotateLabel;
+		ofxColorSlider colorSlider;
 };

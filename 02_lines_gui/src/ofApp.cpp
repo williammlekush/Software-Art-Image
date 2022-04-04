@@ -2,6 +2,11 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+	gui.setup()->setWidthElements(160);
+	gui.add(thickSlider.setup("thickness", 1.0, 1.0, 20.0,160, 16));
+	gui.add(rotateLabel.setup("rotate", "press 'r' to rotate", 160, 16));
+	gui.add(colorSlider.setup("color", 0x000000, 0x000000, 0xFFFFFf0, 160, 16));
+
 	pos = ofVec2f(0, ofRandomHeight());
 
 	xChange = 1;
@@ -10,6 +15,8 @@ void ofApp::setup() {
 	activeLine.addVertex(pos.x, pos.y);
 
 	ofBackground(255);
+
+
 }
 
 //--------------------------------------------------------------
@@ -42,10 +49,9 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofColor mainColor;
-	mainColor.setHex(0x4169E1);
-	ofSetColor(mainColor);
-	ofSetLineWidth(3);
+	gui.draw();
+	ofSetColor(colorSlider);
+	ofSetLineWidth(thickSlider);
 
 	for (auto line : lines) {
 		line.draw();
@@ -57,7 +63,7 @@ void ofApp::draw() {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
-	if (key == 'r') {
+	if (key = 'r') {
 		if (xChange != 0) {
 			xChange = 0;
 			yChange = (int)ofRandom(2);
