@@ -3,11 +3,15 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	pos = ofVec2f(0, ofRandomHeight());
+
 	x = 0;
 	y = ofRandomHeight();
+	
 	xChange = 1;
 	yChange = 0;
-	line.addVertex(pos.x, pos.y);
+	
+	activeLine.addVertex(pos.x, pos.y);
+	
 	ofBackground(255);
 }
 
@@ -15,7 +19,28 @@ void ofApp::setup(){
 void ofApp::update(){
 	pos.x += xChange;
 	pos.y += yChange;
-	line.lineTo(pos.x, pos.y);
+
+	if (pos.x < 0 || pos.x > ofGetWindowWidth() || pos.y < 0 || pos.y > ofGetWindowHeight()) {
+		lines.push_back(activeLine);
+		activeLine.clear();
+
+		if (pos.x < 0) {
+			pos.x = ofGetWindowWidth();
+		}
+		else if (pos.x > ofGetWindowWidth()) {
+			pos.x = 0;
+		}
+		else if (pos.y < 0) {
+			pos.y = ofGetWindowHeight();
+		}
+		else if (pos.y > ofGetWindowHeight()) {
+			pos.y = 0;
+		}
+
+		activeLine.addVertex(pos.x, pos.y);
+	}
+	
+	activeLine.lineTo(pos.x, pos.y);
 }
 
 //--------------------------------------------------------------
@@ -24,8 +49,13 @@ void ofApp::draw(){
 	mainColor.setHex(0x4169E1);
 	ofSetColor(mainColor);
 	ofSetLineWidth(3);
-	line.draw();
-	line.simplify();
+
+	for (auto line : lines) {
+		line.draw();
+	}
+
+	activeLine.draw();
+	activeLine.simplify();	
 }
 
 //--------------------------------------------------------------
@@ -46,7 +76,6 @@ void ofApp::keyPressed(int key){
 			}
 		}
 	}
-
 }
 
 //--------------------------------------------------------------
