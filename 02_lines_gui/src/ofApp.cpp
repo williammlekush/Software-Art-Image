@@ -63,7 +63,7 @@ void ofApp::draw() {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
-	if (key = 'r') {
+	if (key == 'r') {
 		if (xChange != 0) {
 			xChange = 0;
 			yChange = (int)ofRandom(2);
@@ -78,6 +78,15 @@ void ofApp::keyPressed(int key) {
 				xChange = -1;
 			}
 		}
+	}
+
+	if (key == 's') {
+		snapped = true;
+	}
+
+	if (snapped) {
+		screenshot.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+		screenshot.save("screenshot_" + ofToString(screenshotCount, 3, '0') + ".png");
 	}
 }
 

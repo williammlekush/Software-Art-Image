@@ -36,4 +36,9 @@ class ofApp : public ofBaseApp{
 		ofxFloatSlider thickSlider;
 		ofxLabel rotateLabel;
 		ofxColorSlider colorSlider;
+
+		ofImage screenshot;
+		bool snapped;
+		int	screenshotCount;
+		
 };
