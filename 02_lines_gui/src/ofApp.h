@@ -22,23 +22,29 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
+		// line moving
 		ofPolyline activeLine;
+		// bin for static lines, enables screen wrapping
 		vector<ofPolyline> lines;
 
+		// position vector
 		ofVec2f pos;
+		
+		// speed of movement
+		int speed;
 
+		// position change variables
 		int xChange;
 		int yChange;
-
-		bool out;
-
+		
+		// gui variables
 		ofxPanel gui;
 		ofxFloatSlider thickSlider;
 		ofxLabel rotateLabel;
 		ofxColorSlider colorSlider;
 
+		// screenshot variables
 		ofImage screenshot;
 
-		int speed;
 		
 };
