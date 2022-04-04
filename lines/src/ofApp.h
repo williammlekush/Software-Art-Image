@@ -22,8 +22,10 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 		ofPolyline line;
+		ofVec2f pos;
 
 		int x;
 		int y;
-		
+		int xChange;
+		int yChange;
 };

@@ -2,16 +2,20 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	pos = ofVec2f(0, ofRandomHeight());
 	x = 0;
 	y = ofRandomHeight();
-	line.addVertex(x, y);
+	xChange = 1;
+	yChange = 0;
+	line.addVertex(pos.x, pos.y);
 	ofBackground(255);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	x += 1;
-	line.lineTo(x, y);
+	pos.x += xChange;
+	pos.y += yChange;
+	line.lineTo(pos.x, pos.y);
 }
 
 //--------------------------------------------------------------
@@ -21,10 +25,27 @@ void ofApp::draw(){
 	ofSetColor(mainColor);
 	ofSetLineWidth(3);
 	line.draw();
+	line.simplify();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+	if (key == 'r') {
+		if (xChange != 0) {
+			xChange = 0;
+			yChange = (int)ofRandom(2);
+			if (yChange == 0) {
+				yChange = -1;
+			}
+		}
+		else {
+			yChange = 0;
+			xChange = (int)ofRandom(2);
+			if (xChange == 0) {
+				xChange = -1;
+			}
+		}
+	}
 
 }
 
