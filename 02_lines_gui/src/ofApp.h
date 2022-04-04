@@ -38,8 +38,6 @@ class ofApp : public ofBaseApp{
 		ofxColorSlider colorSlider;
 
 		ofImage screenshot;
-		bool snapped;
-		int	screenshotCount;
 
 		int speed;
 		

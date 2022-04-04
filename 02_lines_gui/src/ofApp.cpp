@@ -88,12 +88,8 @@ void ofApp::keyPressed(int key) {
 	}
 
 	if (key == 's') {
-		snapped = true;
-	}
-
-	if (snapped) {
 		screenshot.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
-		screenshot.save("screenshot_" + ofToString(screenshotCount, 3, '0') + ".png");
+		screenshot.save("screenshot_001.png");
 	}
 }
 
