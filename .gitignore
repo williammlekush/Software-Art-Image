@@ -20,11 +20,10 @@ openFrameworks-Info.plist
 # but not the data folder
 ###########################
 
-*/bin/*
-!*/bin/data/
+**/bin/*
+!**/bin/data/
 
-
-*/obj/*
+**/obj/*
 
 #########
 # general
