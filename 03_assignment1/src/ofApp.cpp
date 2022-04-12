@@ -2,126 +2,188 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	// set up the gui
-	gui.setup()->setWidthElements(160);
-	// have a slider for the thickness
-	gui.add(thickSlider.setup("thickness", 1.0, 1.0, 20.0, 160, 16));
-	// a label describing the rotation function
-	// opted for this over a button because buttons can be pressed and held
-	gui.add(rotateLabel.setup("rotate", "press 'r' to rotate", 160, 16));
-	// color for the line to change
-	gui.add(colorSlider.setup("color", 0x000000, 0x000000, 0xFFFFFf0, 160, 16));
+	// change this for more/less lines, 20 is nice on 1080p
+	lineCount = 20;
 
-	// chose a random point on the left to start
-	pos = ofVec2f(0, ofRandomHeight());
+	// resize all the vectors up front, more efficient than push_back()
+	positions.resize(lineCount);
+	lines.resize(lineCount);
+	xChanges.resize(lineCount);
+	yChanges.resize(lineCount);
+	delay.resize(lineCount);
+	thicks.resize(lineCount);
+	speeds.resize(lineCount);
+	keyColors.resize(lineCount);
+	lerpColors.resize(lineCount);
 
-	// set the speed, 5 is good
-	speed = 5;
 
-	// start moving to the right
-	xChange = speed;
-	yChange = 0;
+	// for every line
+	for (int i = 0; i < lineCount; i++) {
+		// give it a random speed
+		speeds[i] = (int)ofRandom(1, 10);
+		
+		// start it moving to the right
+		xChanges[i] = speeds[i];
+		yChanges[i] = 0;
 
-	// add a vertix on the position
-	activeLine.addVertex(pos.x, pos.y);
+		// give it a random time between turns
+		int delayf = ofNoise(ofRandom(5)) * 1000;
+		delay[i] = (int)delayf;
 
-	// set background to white
-	ofBackground(255);
+		// random thickness
+		thicks[i] = ofRandom(1, 10);
+
+		// generate its key color
+		keyColors[i] = ofColor(
+			ofMap(ofRandom(i), 0.0, i, 0.0, 255.0),
+			ofMap(ofRandom(i), 0.0, i, 0.0, 255.0),
+			ofMap(ofRandom(i), 0.0, i, 0.0, 255.0)
+			);
+
+		// a random position
+		positions[i] = (ofVec2f(ofRandomWidth(), ofRandomHeight()));
+		
+		// instantiate a Polyline with the position
+		tempL.clear();
+		tempL.addVertex(positions[i].x, positions[i].y);
+
+		// instantiate a line with that Polyline
+		tempLine.clear();
+		tempLine.push_back(tempL);
+
+		// stash the line
+		lines[i] = tempLine;
+	}
+
+	// first color is the first key color
+	lerpColors[0] = keyColors[0];
+
+	// use a controlled random lerping method for the rest
+	for (int i = 1; i < lineCount; i++) {
+		lerpColors[i] = keyColors[0].lerp(keyColors[i], ofRandom(1.0));
+	}
+
+	// set to a midtone from the first key color to white
+	// drop opacity to reduce visual noise
+	ofBackground(ofColor(keyColors[0].lerp(0xFFFFFF, 0.2), 127));
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	// increase the position by the coordinate changes
-	pos.x += xChange;
-	pos.y += yChange;
 
-	// if outside the window, make a new line without loosing the old one
-	// to create an effect of wrapping around to the other side
-	if (pos.x < 0 || pos.x > ofGetWindowWidth() || pos.y < 0 || pos.y > ofGetWindowHeight()) {
-		// store the current line data
-		lines.push_back(activeLine);
-		// clear the current line
-		activeLine.clear();
-		// determine new corrdinates based on how peole are out
-		if (pos.x < 0) {
-			pos.x = ofGetWindowWidth();
-		}
-		else if (pos.x > ofGetWindowWidth()) {
-			pos.x = 0;
-		}
-		else if (pos.y < 0) {
-			pos.y = ofGetWindowHeight();
-		}
-		else if (pos.y > ofGetWindowHeight()) {
-			pos.y = 0;
+	// grab the time, used throughout
+	int time = ofGetElapsedTimeMillis();
+
+	// for all the lines
+	for (int i = 0; i < lineCount; i ++) {
+		// grab their positions
+		float posX = positions[i].x;
+		float posY = positions[i].y;
+		
+		// increase the position by the coordinate changes
+		posX += xChanges[i];
+		posY += yChanges[i];
+
+		// if the position is outside the window, we need to make a new line
+		// to create an effect of wrapping around to the other side
+		if (posX < 0 || posX > ofGetWindowWidth() || posY < 0 || posY > ofGetWindowHeight()) {
+	
+			// determine new corrdinates based on how they are out
+			if (posX < 0) {
+				posX = ofGetWindowWidth();
+			}
+			else if (posX > ofGetWindowWidth()) {
+				posX = 0;
+			}
+			else if (posY < 0) {
+				posY = ofGetWindowHeight();
+			}
+			else if (posY > ofGetWindowHeight()) {
+				posY = 0;
+			}
+
+			// create a new temporary line at the new position
+			tempL.clear();
+			// add the starting vertix
+			tempL.addVertex(posX, posY);
+
+			// stash the line
+			lines[i].push_back(tempL);
+
+	
 		}
 
-		// add the starting vertix
-		activeLine.addVertex(pos.x, pos.y);
+		// stash the new position
+		positions[i].x = posX;
+		positions[i].y = posY;
+
+		// extend the last line to the new position
+		lines[i][lines[i].size() - 1].lineTo(posX, posY);
+
+		// turn according the line's delay
+		// use < 10 instead of == 0 because fps means == 0 will rarely happen
+		// higher numbers --> pauses followed by many turns
+		if (time % delay[i] < 10) {
+			// if moving horizontally
+			if (xChanges[i] != 0) {
+				// stop moving horizontally
+				xChanges[i] = 0;
+				// start moving vertically
+				yChanges[i] = (int)ofRandom(2);
+				if (yChanges[i] == 0) {
+					yChanges[i] = -speeds[i];
+				}
+				else {
+					yChanges[i] = speeds[i];
+				}
+			}
+			// otherwise,
+			else {
+				// stop moving vertically
+				yChanges[i] = 0;
+				// start moving horizontally
+				xChanges[i] = (int)ofRandom(2);
+				if (xChanges[i] == 0) {
+					xChanges[i] = -speeds[i];
+				}
+				else {
+					xChanges[i] = speeds[i];
+				}
+			}
+		}
 	}
-
-	// add a line to the new position
-	activeLine.lineTo(pos.x, pos.y);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	// set the color to the color slider
-	ofSetColor(colorSlider);
-	// set line thickness to the thickness slider
-	ofSetLineWidth(thickSlider);
+	// for each line
+	for (int i = 0; i < lineCount; i++) {
 
-	// draw all the lines
-	for (auto line : lines) {
-		line.draw();
+		// simplify the last path of each line
+		// to minimize overhead
+		lines[i][lines[i].size()-1].simplify();
+
+		// draw all the paths for the line
+		for (auto l : lines[i]) {
+
+			// set the color
+			ofSetColor(lerpColors[i], 127);
+			// set line thickness
+			ofSetLineWidth(thicks[i]);
+
+			// draw the lines
+			l.draw();
+		}
 	}
-
-	// draw the active line
-	activeLine.draw();
-	// minimize the nubmer of points
-	activeLine.simplify();
-	// draw the gui on top
-	gui.draw();
 
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
-
-	// if r is pressed, make a random turn left or right
-	if (key == 'r') {
-		// if moving horizontally
-		if (xChange != 0) {
-			// stop moving horizontally
-			xChange = 0;
-			// start moving vertically
-			yChange = (int)ofRandom(2);
-			if (yChange == 0) {
-				yChange = -speed;
-			}
-			else {
-				yChange = speed;
-			}
-		}
-		// otherwise,
-		else {
-			// stop moving vertically
-			yChange = 0;
-			// start moving horizontally
-			xChange = (int)ofRandom(2);
-			if (xChange == 0) {
-				xChange = -speed;
-			}
-			else {
-				xChange = speed;
-			}
-		}
-	}
-
 	// save the window to a png when the 's' key is pressed
 	if (key == 's') {
 		screenshot.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
-		screenshot.save("screenshot_002.png"); // adjust this with each canvas
+		screenshot.save("screenshot" + ofToString(ofGetElapsedTimeMillis()) + ".png"); // use time to differentiate
 	}
 }
 

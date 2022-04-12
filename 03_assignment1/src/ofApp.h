@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -22,28 +21,38 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-		// line moving
-		ofPolyline activeLine;
-		// bin for static lines, enables screen wrapping
-		vector<ofPolyline> lines;
+		// number of visible lines
+		int lineCount;
 
-		// position vector
-		ofVec2f pos;
+		// temporary path for instantiation
+		ofPolyline tempL;
 
-		// speed of movement
-		int speed;
+		// vector of all the paths that make up a single visible line
+		// needed for screen wrapping
+		vector<ofPolyline> tempLine;
+		
+		// bin for all the drawn lines
+		vector<vector<ofPolyline>> lines;
 
-		// position change variables
-		int xChange;
-		int yChange;
+		// parallel vector for varying frequency of turns line-to-line
+		vector<int> delay;
 
-		// gui variables
-		ofxPanel gui;
-		ofxFloatSlider thickSlider;
-		ofxLabel rotateLabel;
-		ofxColorSlider colorSlider;
+		// parallel vector for varying speed line-to-line
+		vector<int> speeds;
 
-		// screenshot variables
+		// position vectors to vary positions
+		vector<ofVec2f> positions;
+		vector<int> xChanges;
+		vector<int> yChanges;
+
+		// thickness vectors to vary thicknesses
+		vector<float> thicks;
+		
+		// color vectors to build and vary colors
+		vector<ofColor> keyColors;
+		vector<ofColor> lerpColors;
+
+		// for docs
 		ofImage screenshot;
 		
 };
