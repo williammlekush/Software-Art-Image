@@ -11,9 +11,9 @@ Of course, I don't remember the artist or the artwork, and I haven't been able t
 
 _c1t13s_ started as an attempt to recreate that line piece, and the code here could be tweaked for such an installation with the addition of new lines being added at a set time interval. However, the still results that emerged at this stage satsified me. They are distinctly architectural and industrial, reminiscent of product designs and building layouts, or maybe the the everpresent speed that sits constantly at the edge of my peripheral senses whenever I'm in a bustling city. Each line might be a person, a building, or any other extension of the environment of a city which is drawn and drawn over as time goes on.
 
-Under the hood, this sketch extends my Lines sketch to work for any number of individual lines, each with their own thicknesses, colors, speeds, and frequency of turning. It is not all purely random, however. I used the lerping technique from [my circles sketch](https://github.com/williammlekush/Software-Art-Image/main/01_threeCircles) to generate the colors, and the frequency of turns are related through noise to reduce the overall visual noise of the piece. The bounds of randomness also keep everything coherent, so the lines won't be too thin or too thick, the speeds too slow or too fast, etc. The stills chosen here selected for their visual coherence - the colors feel harmonious, the lines compelling, and the shapes layered upon each other.
+Under the hood, this sketch extends my Lines sketch to work for any number of individual lines, each with their own thicknesses, colors, speeds, and frequency of turning. It is not all purely random, however. I used the lerping technique from [my circles sketch](https://github.com/williammlekush/Software-Art-Image/main/01_threeCircles) to generate the colors, and the frequency of turns are related through noise to reduce the overall visual noise of the piece. The opacity of colors is also reduced so that the lines can gradually build upon each other. The bounds of randomness also keep everything coherent, so the lines won't be too thin or too thick, the speeds too slow or too fast, etc. The stills chosen here selected because the colors feel harmonious, the lines compelling, and the shapes layered upon each other.
 
-![Example 1](https://github.com/williammlekush/Software-Art-Image/tree/main/03_assignment1/bin/data/screenshot23515.png)
-![Example 2](https://github.com/williammlekush/Software-Art-Image/tree/main/03_assignment1/bin/data/screenshot62495.png)
-![Example 3](https://github.com/williammlekush/Software-Art-Image/tree/main/03_assignment1/bin/data/screenshot56625.png)
-![Example 4](https://github.com/williammlekush/Software-Art-Image/tree/main/03_assignment1/bin/data/screenshot38301.png)
+![Example 1](bin/data/screenshot23515.png)
+![Example 2](bin/data/screenshot62495.png)
+![Example 3](bin/data/screenshot56625.png)
+![Example 4](bin/data/screenshot38301.png)
