@@ -28,4 +28,5 @@ class ofApp : public ofBaseApp{
 		ofVec3f targetCircles[3];
 		ofColor targetColors[3];
 
+		ofImage screenshot;
 };

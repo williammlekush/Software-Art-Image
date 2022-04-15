@@ -108,6 +108,11 @@ void ofApp::keyPressed(int key){
 
 	}
 
+	if (key == 's') {
+		screenshot.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+		screenshot.save("screenshot" + ofToString(ofGetElapsedTimeMillis()) + ".png"); // use time to differentiate
+	}
+
 }
 
 //--------------------------------------------------------------
