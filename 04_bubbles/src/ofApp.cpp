@@ -20,7 +20,7 @@ void ofApp::setup(){
 		circles[1].z * 2.56
 	);
 
-	// declare key colors for lerping
+	// set key colors for color harmony
 	for (int i = 0; i < 4; i++) {
 		keyColors[i] = ofColor(
 			ofMap(ofNoise(ofRandom(255)),0, 1, 0, 255),
@@ -28,7 +28,7 @@ void ofApp::setup(){
 			ofMap(cos(ofRandom(255)),0,1,0,255));
 	}
 
-	// use lerping to create color harmonies
+	// use lerping to generate color harmonies
 	for (int i = 0; i < 3; i++) {
 		colors[i] = keyColors[i].lerp(keyColors[i + 1], ofRandom(1.0));
 		targetCircles[i] = circles[i];
@@ -44,26 +44,29 @@ void ofApp::update(){
 		ofVec3f circle = circles[i];
 		ofVec3f target = targetCircles[i];
 
-
-
 		circles[i] = ofVec3f(
+			// constantly move the circles toward the target cirlces
 			speed * target.x + (1 - speed) * circle.x,
 			speed * target.y + (1 - speed) * circle.y,
+			// have the size oscilate between bounds
+			// use the squard golden ratio (~2.56) to set the oscillation bounds
 			ofMap(sin(ofGetElapsedTimef() + 2.56 * i), 0, 1, targetCircles[i].z / 1.6, targetCircles[i].z)
 		);
 
-
+		// move the colors toward the target colors using lerping
 		colors[i] = colors[i].getLerped(targetColors[i], speed);
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	// set the background color to transition cleanly
 	ofColor bgColor = keyColors[0];
 	bgColor.setBrightness(200);
 	bgColor.setSaturation(100);
 	ofBackground(bgColor);
 
+	// draw the circles with a high resolution
 	ofSetCircleResolution(100);
 	for (int i = 2; i > -1; i --) {
 		ofVec3f circle = circles[i];
@@ -74,6 +77,7 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+	// when r is pressed, reset to a new position and color scheme
 	if (key == 'r') {
 		targetCircles[0] = ofVec3f(
 			ofRandom(ofGetWindowWidth() * 2 / 12, ofGetWindowWidth() * 10 / 12),
