@@ -14,7 +14,6 @@ class ofApp : public ofBaseApp{
 		ofVec3f setCirclePos(ofVec3f circle, int id, float offset);
 		ofVec3f setCircleR(ofVec3f circle, int id);
 
-
 		ofColor getKeyColor();
 		ofColor lerpColor(ofColor keyColor, ofColor targetColor);
 
@@ -34,7 +33,6 @@ class ofApp : public ofBaseApp{
 		int bands;
 
 		float decay;
-		float volume;
 		float playback;
 
 };
