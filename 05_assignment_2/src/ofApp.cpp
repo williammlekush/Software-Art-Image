@@ -1,24 +1,23 @@
 #include "ofApp.h"
 
-//--------------------------------------------------------------
+//-------------------------------------------------------------
+ofVec3f ofApp::setCirclePos(ofVec3f circle, int id, float offset) {
+	circle.x = ofMap(ofNoise(offset * pow(id, id) + sin(id)), 0.0f, 1.0f, 0.0f, ofGetWindowWidth());
+	circle.y = ofMap(ofNoise(offset * pow(id, id) + cos(id)), 0.0f, 1.0f, 0.0f, ofGetWindowHeight());
+	return circle;
+}
+
+ofVec3f ofApp::setCircleR(ofVec3f circle, int id) {
+	circle.z = ofGetWindowHeight() / 9 * pow(1.618, id);
+	return circle;
+}
+
 void ofApp::setup(){
 	// constrain heights to narrower bins than widths
 	// largest circle has smallest range --> circles remain inside each other
-	circles[0] = ofVec3f(
-		ofRandom(ofGetWindowWidth() * 2 / 12, ofGetWindowWidth() * 10 / 12),
-		ofRandom(ofGetWindowHeight() * 3 / 12, ofGetWindowHeight() * 9 / 12),
-		ofGetWindowHeight() / 9
-	);
-	circles[1] = ofVec3f(
-		ofRandom(ofGetWindowWidth() * 3 / 12, ofGetWindowWidth() * 9 / 12),
-		ofRandom(ofGetWindowHeight() * 4 / 12, ofGetWindowHeight() * 8 / 12),
-		circles[0].z * 2.56
-	);
-	circles[2] = ofVec3f(
-		ofRandom(ofGetWindowWidth() * 5 / 12, ofGetWindowWidth() * 7 / 12),
-		ofRandom(ofGetWindowHeight() * 5 / 12, ofGetWindowHeight() * 7 / 12),
-		circles[1].z * 2.56
-	);
+	for (int i = 0; i < 3; i++) {
+		circles[i] = setCirclePos(setCircleR(circles[i], i), i, 1);
+	}
 
 	// set key colors for color harmony
 	for (int i = 0; i < 4; i++) {
@@ -71,7 +70,11 @@ void ofApp::draw(){
 	for (int i = 2; i > -1; i--) {
 		ofVec3f circle = circles[i];
 		ofSetColor(colors[i]);
+
+		ofPushMatrix();
+		//ofTranslate(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
 		ofDrawCircle(circle.x, circle.y, circle.z);
+		ofPopMatrix();
 	}
 }
 
@@ -79,21 +82,9 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
 	// when r is pressed, reset to a new position and color scheme
 	if (key == 'r') {
-		targetCircles[0] = ofVec3f(
-			ofRandom(ofGetWindowWidth() * 2 / 12, ofGetWindowWidth() * 10 / 12),
-			ofRandom(ofGetWindowHeight() * 3 / 12, ofGetWindowHeight() * 9 / 12),
-			ofGetWindowHeight() / 9
-		);
-		targetCircles[1] = ofVec3f(
-			ofRandom(ofGetWindowWidth() * 3 / 12, ofGetWindowWidth() * 9 / 12),
-			ofRandom(ofGetWindowHeight() * 4 / 12, ofGetWindowHeight() * 8 / 12),
-			targetCircles[0].z * 2.56
-		);
-		targetCircles[2] = ofVec3f(
-			ofRandom(ofGetWindowWidth() * 5 / 12, ofGetWindowWidth() * 7 / 12),
-			ofRandom(ofGetWindowHeight() * 5 / 12, ofGetWindowHeight() * 7 / 12),
-			targetCircles[1].z * 2.56
-		);
+		for (int i = 0; i < 3; i++) {
+			targetCircles[i] = setCirclePos(setCircleR(circles[i], i), i, ofGetElapsedTimef());
+		}
 
 		for (int i = 0; i < 4; i++) {
 			keyColors[i] = ofColor(

@@ -21,6 +21,9 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		ofVec3f setCirclePos(ofVec3f circle, int id, float offset);
+		ofVec3f setCircleR(ofVec3f circle, int id);
+
 		ofVec3f circles[3];
 		ofColor keyColors[4];
 		ofColor colors[3];
