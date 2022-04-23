@@ -25,6 +25,7 @@ class ofApp : public ofBaseApp{
 		ofVec3f setCircleR(ofVec3f circle, int id);
 		
 		ofColor getKeyColor();
+		ofColor lerpColor(ofColor keyColor, ofColor targetColor);
 
 		ofVec3f circles[3];
 		ofColor keyColors[4];

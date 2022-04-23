@@ -20,6 +20,9 @@ ofColor ofApp::getKeyColor() {
 		);
 }
 
+ofColor ofApp::lerpColor(ofColor keyColor, ofColor targetColor) {
+	return keyColor.lerp(targetColor, ofRandom(1.0));
+}
 void ofApp::setup(){
 	// constrain heights to narrower bins than widths
 	// largest circle has smallest range --> circles remain inside each other
@@ -36,7 +39,7 @@ void ofApp::setup(){
 
 	// use lerping to generate color harmonies
 	for (int i = 0; i < 3; i++) {
-		colors[i] = keyColors[i].lerp(keyColors[i + 1], ofRandom(1.0));
+		colors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
 		targetColors[i] = colors[i];
 	}
 }
@@ -99,7 +102,7 @@ void ofApp::keyPressed(int key){
 		}
 
 		for (int i = 0; i < 3; i++) {
-			targetColors[i] = keyColors[i].lerp(keyColors[i + 1], ofRandom(1.0));
+			targetColors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
 		}
 
 	}
