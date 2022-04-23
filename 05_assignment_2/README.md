@@ -16,7 +16,8 @@ I'm satisfied with this sketch for what it is, but I still want the one-to-one s
 
 ## Docs
 
-[Video](https://youtu.be/JVMUuG2Ovd4)
+![Video](https://youtu.be/JVMUuG2Ovd4)
+
 ![Experience Screenshot 1](https://github.com/williammlekush/Software-Art-Image/blob/main/05_assignment_2/bin/data/screenshot48063.png)
 ![Experience Screenshot 2](https://github.com/williammlekush/Software-Art-Image/blob/main/05_assignment_2/bin/data/screenshot49366.png)
 ![Experience Screenshot 3](https://github.com/williammlekush/Software-Art-Image/blob/main/05_assignment_2/bin/data/screenshot51286.png)
