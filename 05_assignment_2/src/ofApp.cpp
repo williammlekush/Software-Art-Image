@@ -24,21 +24,16 @@ ofColor ofApp::lerpColor(ofColor keyColor, ofColor targetColor) {
 	return keyColor.lerp(targetColor, ofRandom(1.0));
 }
 void ofApp::setup(){
-	// constrain heights to narrower bins than widths
-	// largest circle has smallest range --> circles remain inside each other
-	for (int i = 0; i < 3; i++) {
-		targetCircles[i] = circles[i] = setCirclePos(setCircleR(circles[i], i), i, 1);
-	}
-
 	// set key colors for color harmony
 	for (int i = 0; i < 4; i++) {
 		keyColors[i] = getKeyColor();
 	}
 
-	// use lerping to generate color harmonies
+	// constrain heights to narrower bins than widths
+	// largest circle has smallest range --> circles remain inside each other
 	for (int i = 0; i < 3; i++) {
-		colors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
-		targetColors[i] = colors[i];
+		targetCircles[i] = circles[i] = setCirclePos(setCircleR(circles[i], i), i, 1);
+		targetColors[i] = colors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
 	}
 }
 
@@ -89,18 +84,15 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
 	// when r is pressed, reset to a new position and color scheme
 	if (key == 'r') {
-		for (int i = 0; i < 3; i++) {
-			targetCircles[i] = setCirclePos(setCircleR(targetCircles[i], i), i, 1);
-		}
-
 		for (int i = 0; i < 4; i++) {
 			keyColors[i] = getKeyColor();
 		}
 
 		for (int i = 0; i < 3; i++) {
+			targetCircles[i] = setCirclePos(setCircleR(targetCircles[i], i), i, 1);
 			targetColors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
-		}
 
+		}
 	}
 
 	if (key == 's') {
