@@ -27,9 +27,7 @@ void ofApp::setup(){
 	// constrain heights to narrower bins than widths
 	// largest circle has smallest range --> circles remain inside each other
 	for (int i = 0; i < 3; i++) {
-		ofVec3f circle = circles[i];
-		circle = setCirclePos(setCircleR(circle, i), i, 1);
-		targetCircles[i] = circles[i] = circle;
+		targetCircles[i] = circles[i] = setCirclePos(setCircleR(circles[i], i), i, 1);
 	}
 
 	// set key colors for color harmony
@@ -92,9 +90,7 @@ void ofApp::keyPressed(int key){
 	// when r is pressed, reset to a new position and color scheme
 	if (key == 'r') {
 		for (int i = 0; i < 3; i++) {
-			ofVec3f circle = targetCircles[i];
-			circle = setCirclePos(setCircleR(circle, i), i, ofGetElapsedTimef());
-			targetCircles[i] = circle;
+			targetCircles[i] = setCirclePos(setCircleR(targetCircles[i], i), i, 1);
 		}
 
 		for (int i = 0; i < 4; i++) {
