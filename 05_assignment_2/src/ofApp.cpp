@@ -12,25 +12,31 @@ ofVec3f ofApp::setCircleR(ofVec3f circle, int id) {
 	return circle;
 }
 
+ofColor ofApp::getKeyColor() {
+	return ofColor(
+		ofMap(ofNoise(ofRandom(255)), 0, 1, 0, 255),
+		ofMap(sin(ofRandom(255)), 0, 1, 0, 255),
+		ofMap(cos(ofRandom(255)), 0, 1, 0, 255)
+		);
+}
+
 void ofApp::setup(){
 	// constrain heights to narrower bins than widths
 	// largest circle has smallest range --> circles remain inside each other
 	for (int i = 0; i < 3; i++) {
-		circles[i] = setCirclePos(setCircleR(circles[i], i), i, 1);
+		ofVec3f circle = circles[i];
+		circle = setCirclePos(setCircleR(circle, i), i, 1);
+		targetCircles[i] = circles[i] = circle;
 	}
 
 	// set key colors for color harmony
 	for (int i = 0; i < 4; i++) {
-		keyColors[i] = ofColor(
-			ofMap(ofNoise(ofRandom(255)), 0, 1, 0, 255),
-			ofMap(sin(ofRandom(255)), 0, 1, 0, 255),
-			ofMap(cos(ofRandom(255)), 0, 1, 0, 255));
+		keyColors[i] = getKeyColor();
 	}
 
 	// use lerping to generate color harmonies
 	for (int i = 0; i < 3; i++) {
 		colors[i] = keyColors[i].lerp(keyColors[i + 1], ofRandom(1.0));
-		targetCircles[i] = circles[i];
 		targetColors[i] = colors[i];
 	}
 }
@@ -83,14 +89,13 @@ void ofApp::keyPressed(int key){
 	// when r is pressed, reset to a new position and color scheme
 	if (key == 'r') {
 		for (int i = 0; i < 3; i++) {
-			targetCircles[i] = setCirclePos(setCircleR(circles[i], i), i, ofGetElapsedTimef());
+			ofVec3f circle = targetCircles[i];
+			circle = setCirclePos(setCircleR(circle, i), i, ofGetElapsedTimef());
+			targetCircles[i] = circle;
 		}
 
 		for (int i = 0; i < 4; i++) {
-			keyColors[i] = ofColor(
-				ofMap(ofNoise(ofRandom(255)), 0, 1, 0, 255),
-				ofMap(sin(ofRandom(255)), 0, 1, 0, 255),
-				ofMap(cos(ofRandom(255)), 0, 1, 0, 255));
+			keyColors[i] = getKeyColor();
 		}
 
 		for (int i = 0; i < 3; i++) {
