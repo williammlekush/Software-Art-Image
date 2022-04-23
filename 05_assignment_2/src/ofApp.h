@@ -37,11 +37,13 @@ class ofApp : public ofBaseApp{
 
 		ofImage screenshot;
 
-		ofSoundPlayer player;
+		ofSoundPlayer chordsLoop;
 
 		float* fft;
 		float* soundSpectrum;
 		int bands;
 
 		float decay;
+		float volume;
+
 };
