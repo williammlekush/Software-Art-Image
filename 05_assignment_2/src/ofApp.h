@@ -35,5 +35,13 @@ class ofApp : public ofBaseApp{
 		ofVec3f targetCircles[3];
 		ofColor targetColors[3];
 
-		ofImage screenshot;		
+		ofImage screenshot;
+
+		ofSoundPlayer player;
+
+		float* fft;
+		float* soundSpectrum;
+		int bands;
+
+		float decay;
 };

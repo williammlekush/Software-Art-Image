@@ -35,28 +35,40 @@ void ofApp::setup(){
 		targetCircles[i] = circles[i] = setCirclePos(setCircleR(circles[i], i), i, 1);
 		targetColors[i] = colors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
 	}
+
+	player.load("chords.mp3");
+	player.play();
+	player.setLoop(true);
+	player.setVolume(0.6f);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	float speed = 0.1;
+	float speed = 0.1f;
+
+	ofSoundUpdate();
 
 	for (int i = 0; i < 3; i++) {
 		ofVec3f circle = circles[i];
 		ofVec3f target = targetCircles[i];
 
 		circles[i] = ofVec3f(
-			// constantly move the circles toward the target cirlces
 			speed * target.x + (1 - speed) * circle.x,
 			speed * target.y + (1 - speed) * circle.y,
-			// have the size oscilate between bounds
-			// use the squard golden ratio (~2.56) to set the oscillation bounds
-			ofMap(sin(ofGetElapsedTimef() + 2.56 * i), 0, 1, targetCircles[i].z / 1.6, targetCircles[i].z)
+			ofMap(
+				sin(ofGetElapsedTimef() + 2.56 * i),
+				0,
+				1,
+				target.z / 1.6,
+				target.z)
 		);
+
 
 		// move the colors toward the target colors using lerping
 		colors[i] = colors[i].getLerped(targetColors[i], speed);
 	}
+
+	
 }
 
 //--------------------------------------------------------------
@@ -89,9 +101,8 @@ void ofApp::keyPressed(int key){
 		}
 
 		for (int i = 0; i < 3; i++) {
-			targetCircles[i] = setCirclePos(setCircleR(targetCircles[i], i), i, 1);
+			targetCircles[i] = setCirclePos(setCircleR(targetCircles[i], i), i, ofGetElapsedTimef());
 			targetColors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
-
 		}
 	}
 
