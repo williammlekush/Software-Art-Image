@@ -45,5 +45,6 @@ class ofApp : public ofBaseApp{
 
 		float decay;
 		float volume;
+		float playback;
 
 };
