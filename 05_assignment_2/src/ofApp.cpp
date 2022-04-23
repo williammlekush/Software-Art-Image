@@ -11,8 +11,8 @@
 * output:	circle paramters (ofVec3f)
 */
 ofVec3f ofApp::setCirclePos(ofVec3f circle, int id, float offset) {
-	circle.x = ofMap(ofNoise(offset * pow(id, id) + sin(id)), 0.0f, 1.0f, 0.0f, ofGetWindowWidth());
-	circle.y = ofMap(ofNoise(offset * pow(id, id) + cos(id)), 0.0f, 1.0f, 0.0f, ofGetWindowHeight());
+	circle.x = ofMap(ofNoise(offset * pow(id, id) * sin(ofRandom(id))), 0.0f, 1.0f, 0.0f, ofGetWindowWidth());
+	circle.y = ofMap(ofNoise(offset * pow(id, id) * cos(ofRandom(id))), 0.0f, 1.0f, 0.0f, ofGetWindowHeight());
 	return circle;
 }
 
@@ -24,7 +24,7 @@ ofVec3f ofApp::setCirclePos(ofVec3f circle, int id, float offset) {
 * output:	circle paramters (ofVec3f)
 */
 ofVec3f ofApp::setCircleR(ofVec3f circle, int id) {
-	circle.z = ofGetWindowHeight() / 4.5 * pow(2.618, id);
+	circle.z = ofGetWindowHeight() / 4.5 * pow(1.618, id);
 	return circle;
 }
 
@@ -54,6 +54,16 @@ ofColor ofApp::lerpColor(ofColor keyColor, ofColor targetColor) {
 }
 
 void ofApp::setup(){
+	// 32, don't go higher than 64!!! (or adjust the divisions later)
+	count = 32;
+
+	// resize for efficiency's sake
+	circles.resize(count);
+	keyColors.resize(count + 1); // need an extra key color for the lerping!
+	colors.resize(count);
+	targetCircles.resize(count);
+	targetColors.resize(count);
+
 	// play the audio on loop
 	chordsLoop.load("chords.mp3");
 	chordsLoop.play();
@@ -74,12 +84,12 @@ void ofApp::setup(){
 	bands = 128;
 
 	// set key colors for color harmony
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < count + 1; i++) {
 		keyColors[i] = getKeyColor();
 	}
 
 	// generate circle parameters
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < count; i++) {
 		// make sure to set targets to initial circles and colors
 		targetCircles[i] = circles[i] = setCirclePos(setCircleR(circles[i], i), i, 1);
 		targetColors[i] = colors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
@@ -95,8 +105,8 @@ void ofApp::update(){
 	ofSoundUpdate();
 
 	// constratin the playback to between 0.2-0.7
-	if (playback > 0.7) {
-		playback = 0.7;
+	if (playback > 2) {
+		playback = 2;
 	}
 	else if (playback < 0.2) {
 		playback = 0.2;
@@ -117,7 +127,7 @@ void ofApp::update(){
 	}
 
 	// update the positions and colors with each frame
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < count; i++) {
 		ofVec3f circle = circles[i];
 		ofVec3f target = targetCircles[i];
 
@@ -145,12 +155,12 @@ void ofApp::draw(){
 
 	// draw the circles with a high resolution
 	ofSetCircleResolution(100);
-	for (int i = 2; i > -1; i--) {
+	for (int i = count - 1; i > -1; i--) {
 		ofVec3f circle = circles[i];
-		ofSetColor(colors[i]);
+		ofSetColor(ofColor(colors[i], 100));
 
 		// take low frequency sub spectrums
-		for (int j = (i + 1) * bands / 32; j > i * bands / 32; j--) {
+		for (int j = (i + 1) * bands / 64; j > i * bands / 64; j--) {
 			// and draw a circle with a radius dependent on the frequency and playback speed
 			// slower = bigger, faster = smaller
 			// TO_DO: HOW DO I MAKE THIS SMOOTH!!!!
@@ -164,10 +174,10 @@ void ofApp::keyPressed(int key){
 	switch (key) {
 		// when r is pressed, reset to a new position and color scheme
 		case'r': 
-			for (auto keyColor : keyColors) {
-				keyColor = getKeyColor();
+			for (int i = 0; i < count + 1; i++) {
+				keyColors[i] = getKeyColor();
 			}
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < count; i++) {
 				targetCircles[i] = setCirclePos(targetCircles[i], i, ofGetElapsedTimef()); // use elapsed time to offset the noise seed
 				targetColors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
 			}
