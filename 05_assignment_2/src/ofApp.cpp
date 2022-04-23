@@ -94,7 +94,6 @@ void ofApp::update(){
 		// move the colors toward the target colors using lerping
 		colors[i] = colors[i].getLerped(targetColors[i], speed);
 	}
-
 	
 }
 
@@ -112,7 +111,6 @@ void ofApp::draw(){
 		ofVec3f circle = circles[i];
 		ofSetColor(colors[i]);
 
-		
 		for (int j = (i + 1) * bands / 32; j > i * bands / 32; j--) {
 			ofDrawCircle(circle.x, circle.y, ofMap(fft[j], 0.0f, 1.0f, 0.0f, circle.z) * 0.5/playback);
 		}
@@ -143,54 +141,4 @@ void ofApp::keyPressed(int key){
 			playback -= 0.01;
 			break;		
 	}
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
 }
