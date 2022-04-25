@@ -105,8 +105,8 @@ void ofApp::update(){
 	ofSoundUpdate();
 
 	// constratin the playback to between 0.2-0.7
-	if (playback > 2) {
-		playback = 2;
+	if (playback > 0.7) {
+		playback = 0.7;
 	}
 	else if (playback < 0.2) {
 		playback = 0.2;
