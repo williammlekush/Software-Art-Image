@@ -28,6 +28,31 @@ ofVec3f ofApp::setCircleR(ofVec3f circle, int id) {
 	return circle;
 }
 
+ofPolyline ofApp::getPoly(ofVec3f circle, float fft, float playback) {
+	ofPolyline poly;
+	float radius = ofMap(fft, 0.0f, 1.0f, 0.0f, circle.z) / playback;
+	poly.arc(circle.x, circle.y, radius, radius, 0, 360, 100);
+	return poly;
+}
+
+ofPath ofApp::getPath(ofPolyline circlePoly) {
+	ofPath path;
+	for (int i = 0; i < circlePoly.getVertices().size(); i++) {
+		if (i == 0) {
+			path.newSubPath();
+			path.moveTo(circlePoly.getVertices()[i]);
+		}
+		else {
+			path.lineTo(circlePoly.getVertices()[i]);
+		}
+	}
+
+	path.close();
+	path.simplify();
+
+	return path;
+}
+
 /**
 * func:		getKeyColor
 * input:	none
@@ -39,8 +64,7 @@ ofColor ofApp::getKeyColor() {
 		ofMap(ofNoise(ofRandom(255)), 0, 1, 0, 255),
 		ofMap(sin(ofRandom(255)), 0, 1, 0, 255),
 		ofMap(cos(ofRandom(255)), 0, 1, 0, 255),
-		100
-	);
+		100);
 }
 
 /**
@@ -81,6 +105,7 @@ void ofApp::setup() {
 
 	// resize for efficiency's sake
 	circles.resize(bands);
+	circlePaths.resize(bands);
 	keyColors.resize(bands + 1); // need an extra key color for the lerping!
 	colors.resize(bands);
 	targetCircles.resize(bands);
@@ -159,10 +184,14 @@ void ofApp::update() {
 		);
 
 
+
+		float radius = ofMap(fft[i], 0.0f, 1.0f, 0.0f, circle.z) / playback;
+		
+		circlePaths[i] = getPath(getPoly(circles[i], fft[i], playback));
+
 		// move the colors toward the target colors using lerping
 		colors[i] = colors[i].getLerped(targetColors[i], speed);
 	}
-
 }
 
 //--------------------------------------------------------------
@@ -172,21 +201,14 @@ void ofApp::draw() {
 	bgColor.setBrightness(200);
 	bgColor.setSaturation(100);
 	ofBackground(bgColor);
-	//ofNoFill();
+	ofEnableAlphaBlending();
 
 	// draw the circles with a high resolution
 	ofSetCircleResolution(100);
 	for (int i = bands - 1; i > -1; i--) {
-		ofVec3f circle = circles[i];
-		ofSetColor(colors[i]);
-
-		// and draw a circle with a radius dependent on the frequency and playback speed
-		// slower = bigger, faster = smaller
-		
-		float radius = ofMap(fft[i], 0.0f, 1.0f, 0.0f, circle.z) / playback;
-		//ofSetLineWidth(radius / 25.6);
-		ofDrawCircle(circle.x, circle.y, radius);
-		
+		ofPath path = circlePaths[i];
+		path.setFillColor(colors[i]);
+		path.draw();
 	}
 }
 
