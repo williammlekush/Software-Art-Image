@@ -18,7 +18,8 @@ public:
 	ofColor lerpColor(ofColor keyColor, ofColor targetColor);
 	float getDecay(float playback);
 	float upperLowerGuard(float num, float max, float min);
-
+	float getFftSize(int bands, float playMin, float playMax, float playback);
+	
 	// vector bins for the circle parameters
 	vector<ofVec3f> circles;
 	vector<ofColor> keyColors;

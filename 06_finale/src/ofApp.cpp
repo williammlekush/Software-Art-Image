@@ -24,7 +24,7 @@ ofVec3f ofApp::setCirclePos(ofVec3f circle, int id, float offset) {
 * output:	circle paramters (ofVec3f)
 */
 ofVec3f ofApp::setCircleR(ofVec3f circle, int id) {
-	circle.z = ofGetWindowHeight() / 3 * pow(1.618, id);
+	circle.z = ofGetWindowHeight() / 4 * pow(1.618, id);
 	return circle;
 }
 
@@ -70,6 +70,11 @@ float ofApp::upperLowerGuard(float num, float max, float min) {
 	}
 }
 
+float ofApp::getFftSize(int bands, float playMin, float playMax, float playback) {
+	return ofMap(bands / playback, bands / playMax, bands / playMin, bands, bands * 3);
+}
+
+
 void ofApp::setup() {
 	// number of circles to represent the sound
 	bands = 32;
@@ -94,10 +99,7 @@ void ofApp::setup() {
 	decay = getDecay(playback);
 
 	// cut the audio into pieces and populate the fft array
-	fft.resize(bands * (playMax + 1.0 - playback));
-	for (auto band:fft) {
-		band = 0.0f;
-	}
+	fft.resize(getFftSize(bands, playMin, playMax, playback));
 
 	// set key colors for color harmony
 	for (int i = 0; i < bands + 1; i++) {
@@ -129,11 +131,11 @@ void ofApp::update() {
 	// update the playback speed
 	chordsLoop.setSpeed(playback);
 
-	// grab the sound spectrum for the bands
-	soundSpectrum = ofSoundGetSpectrum(bands);
-
 	// cut the audio into pieces and populate the fft array
-	fft.resize(bands * (playMax + 1.0 - playback));
+	fft.resize(getFftSize(bands, playMin, playMax, playback));
+
+	// grab the sound spectrum for the bands
+	soundSpectrum = ofSoundGetSpectrum(fft.size());
 
 	for (int i = 0; i < bands; i++) {
 		// decrease the bands using decay
