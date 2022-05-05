@@ -16,6 +16,8 @@ public:
 	ofVec3f setCircleR(ofVec3f circle, int id);
 	ofColor getKeyColor();
 	ofColor lerpColor(ofColor keyColor, ofColor targetColor);
+	float getDecay(float playback);
+	float upperLowerGuard(float num, float max, float min);
 
 	// vector bins for the circle parameters
 	vector<ofVec3f> circles;
@@ -26,8 +28,6 @@ public:
 	vector<ofVec3f> targetCircles;
 	vector<ofColor> targetColors;
 
-	// count for circles
-	int count;
 
 	// for screenshots
 	ofImage screenshot;
@@ -35,11 +35,13 @@ public:
 	// for sound looping
 	ofSoundPlayer chordsLoop;
 
-	float* fft;
+	vector<float> fft;
 	float* soundSpectrum;
 	int bands;
 
 	float decay;
 	float playback;
+	float playMax;
+	float playMin;
 
 };
