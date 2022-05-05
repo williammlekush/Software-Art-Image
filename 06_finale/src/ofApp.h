@@ -2,23 +2,44 @@
 
 #include "ofMain.h"
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
 
-	public:
-		void setup();
-		void update();
-		void draw();
+public:
+	void setup();
+	void update();
+	void draw();
 
-		void keyPressed(int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void mouseEntered(int x, int y);
-		void mouseExited(int x, int y);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
-		
+	void keyPressed(int key);
+
+	// see ofApp for PIO docs
+	ofVec3f setCirclePos(ofVec3f circle, int id, float offset);
+	ofVec3f setCircleR(ofVec3f circle, int id);
+	ofColor getKeyColor();
+	ofColor lerpColor(ofColor keyColor, ofColor targetColor);
+
+	// vector bins for the circle parameters
+	vector<ofVec3f> circles;
+	vector<ofColor> keyColors;
+	vector<ofColor> colors;
+
+	// targets for the transitions
+	vector<ofVec3f> targetCircles;
+	vector<ofColor> targetColors;
+
+	// count for circles
+	int count;
+
+	// for screenshots
+	ofImage screenshot;
+
+	// for sound looping
+	ofSoundPlayer chordsLoop;
+
+	float* fft;
+	float* soundSpectrum;
+	int bands;
+
+	float decay;
+	float playback;
+
 };
