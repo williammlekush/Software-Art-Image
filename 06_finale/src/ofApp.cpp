@@ -31,7 +31,7 @@ ofVec3f ofApp::setCircleR(ofVec3f circle, int id) {
 ofPolyline ofApp::getPoly(ofVec3f circle, float fft, float playback) {
 	ofPolyline poly;
 	float radius = ofMap(fft, 0.0f, 1.0f, 0.0f, circle.z) / playback;
-	poly.arc(circle.x, circle.y, radius, radius, 0, 360, 100);
+	poly.arc(circle.x, circle.y, radius, radius, 0, 360, 100);	
 	return poly;
 }
 
@@ -52,6 +52,15 @@ ofPath ofApp::getPath(ofPolyline circlePoly) {
 
 	return path;
 }
+
+ofPolyline ofApp::glitch(ofPolyline poly, float xVary, float yVary) {
+	for (auto &point : poly.getVertices()) {
+		point.x += ofMap(sin(ofRandom(ofGetElapsedTimef())), 0.0f, 1.0f, -xVary, xVary);
+		point.y += ofMap(cos(ofRandom(ofGetElapsedTimef())), 0.0f, 1.0f, -yVary, yVary);
+	}
+	return poly;
+}
+
 
 /**
 * func:		getKeyColor
@@ -103,8 +112,11 @@ void ofApp::setup() {
 	// number of circles to represent the sound
 	bands = 32;
 
+	isGlitch = false;
+
 	// resize for efficiency's sake
 	circles.resize(bands);
+	circlePolys.resize(bands);
 	circlePaths.resize(bands);
 	keyColors.resize(bands + 1); // need an extra key color for the lerping!
 	colors.resize(bands);
@@ -187,7 +199,15 @@ void ofApp::update() {
 
 		float radius = ofMap(fft[i], 0.0f, 1.0f, 0.0f, circle.z) / playback;
 		
-		circlePaths[i] = getPath(getPoly(circles[i], fft[i], playback));
+		circlePolys[i] = getPoly(circles[i], fft[i], playback);
+
+		if (isGlitch) {
+			for (auto &poly : circlePolys) {
+				poly = glitch(poly, 10 / playback, 2 / playback);
+			}
+		}
+
+		circlePaths[i] = getPath(circlePolys[i]);
 
 		// move the colors toward the target colors using lerping
 		colors[i] = colors[i].getLerped(targetColors[i], speed);
@@ -238,6 +258,9 @@ void ofApp::keyPressed(int key) {
 	case OF_KEY_DOWN:
 		playback -= 0.01;
 		// cut the audio into pieces and populate the fft array
+		break;
+	case 'g':
+		isGlitch = !isGlitch;
 		break;
 	}
 }

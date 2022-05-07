@@ -18,6 +18,8 @@ public:
 	ofPolyline getPoly(ofVec3f circle, float fft, float playback);
 	ofPath getPath(ofPolyline circlePoly);
 
+	ofPolyline glitch(ofPolyline poly, float xVary, float yVary);
+
 	ofColor getKeyColor();
 	ofColor lerpColor(ofColor keyColor, ofColor targetColor);
 	
@@ -30,6 +32,7 @@ public:
 
 	// vector bins for the circle parameters
 	vector<ofVec3f> circles;
+	vector<ofPolyline> circlePolys;
 	vector<ofPath> circlePaths;
 
 	vector<ofColor> keyColors;
@@ -55,4 +58,5 @@ public:
 	float playMax;
 	float playMin;
 
+	bool isGlitch;
 };
