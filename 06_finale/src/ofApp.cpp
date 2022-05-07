@@ -31,6 +31,7 @@ ofVec3f ofApp::setCircleR(ofVec3f circle, int id) {
 ofPolyline ofApp::getPoly(ofVec3f circle, float fft, float playback) {
 	ofPolyline poly;
 	float radius = ofMap(fft, 0.0f, 1.0f, 0.0f, circle.z) / playback;
+	radius = upperLowerGuard(radius, radius, 5);
 	poly.arc(circle.x, circle.y, radius, radius, 0, 360, 100);	
 	return poly;
 }
@@ -110,41 +111,51 @@ float ofApp::getFftSize(int bands, float playMin, float playMax, float playback)
 
 void ofApp::setup() {
 	// number of circles to represent the sound
-	bands = 32;
+	bands = 0;
+	bandsMax = 32;
+	
+	// adjust these to control size and speed of circles
+	volMin = 0.0f;
+	volMax = 0.7f;
+
+	volume = volMin;
+
+	playMax = 1.0f;
+	playMin = 0.2f;
+
+	playback = playMin;
+
+
+	decay = getDecay(playback);
 
 	isGlitch = false;
 
 	// resize for efficiency's sake
-	circles.resize(bands);
-	circlePolys.resize(bands);
-	circlePaths.resize(bands);
-	keyColors.resize(bands + 1); // need an extra key color for the lerping!
-	colors.resize(bands);
-	targetCircles.resize(bands);
-	targetColors.resize(bands);
+	circles.resize(bandsMax);
+	circlePolys.resize(bandsMax);
+	circlePaths.resize(bandsMax);
+	keyColors.resize(bandsMax + 1); // need an extra key color for the lerping!
+	colors.resize(bandsMax);
+	targetCircles.resize(bandsMax);
+	targetColors.resize(bandsMax);
 
 	// play the audio on loop
 	chordsLoop.load("chords.mp3");
 	chordsLoop.play();
 	chordsLoop.setLoop(true);
-	chordsLoop.setVolume(0.7f);
-
-	// adjust these to control size and speed of circles
-	playback = 0.3f;
-	playMax = 1.0f;
-	playMin = 0.2f;
-	decay = getDecay(playback);
+	chordsLoop.setVolume(volume);
+	chordsLoop.setSpeed(playback);
 
 	// cut the audio into pieces and populate the fft array
 	fft.resize(getFftSize(bands, playMin, playMax, playback));
 
 	// set key colors for color harmony
-	for (int i = 0; i < bands + 1; i++) {
+	for (int i = 0; i < bandsMax + 1; i++) {
 		keyColors[i] = getKeyColor();
 	}
 
 	// generate circle parameters
-	for (int i = 0; i < bands; i++) {
+	for (int i = 0; i < bandsMax; i++) {
 		// make sure to set targets to initial circles and colors
 		targetCircles[i] = circles[i] = setCirclePos(setCircleR(circles[i], i), i, 1);
 		targetColors[i] = colors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
@@ -159,14 +170,11 @@ void ofApp::update() {
 	// update sound every frame
 	ofSoundUpdate();
 
-	// constratin the playback to between 0.2-0.7
-	playback = upperLowerGuard(playback, playMax, playMin);
-
 	// make decay dependent on playback
 	decay = getDecay(playback);
 
-	// update the playback speed
-	chordsLoop.setSpeed(playback);
+	// update the volume
+	chordsLoop.setVolume(volume);
 
 	// cut the audio into pieces and populate the fft array
 	fft.resize(getFftSize(bands, playMin, playMax, playback));
@@ -194,32 +202,30 @@ void ofApp::update() {
 			speed * target.y + (1 - speed) * circle.y,
 			setCircleR(circle, i).z
 		);
-
-
-
-		float radius = ofMap(fft[i], 0.0f, 1.0f, 0.0f, circle.z) / playback;
 		
 		circlePolys[i] = getPoly(circles[i], fft[i], playback);
 
-		if (isGlitch) {
-			for (auto &poly : circlePolys) {
-				poly = glitchCircles(poly, 10 / playback, 2 / playback);
-			}
-
-			float noise = ofNoise(ofGetElapsedTimef());
-			float soundPos = chordsLoop.getPosition();
-			float noiseVary = 0.9;
-			float min = ofMap(soundPos - noise, 0.0f, 1.0f, 0.0f, -noiseVary);
-			float max = ofMap(soundPos + noise, 0.0f, 1.0f, 0.0f, noiseVary);
-
-			// chordsLoop.setPosition(soundPos += noise); // subtle glitch, start here
-			// chordsLoop.setPosition(ofRandom(min, max)); // gradually increase min / max to move from paused to moving glitch
-		}
-
-		circlePaths[i] = getPath(circlePolys[i]);
-
 		// move the colors toward the target colors using lerping
 		colors[i] = colors[i].getLerped(targetColors[i], speed);
+	}
+
+	if (isGlitch) {
+		for (auto& poly : circlePolys) {
+			poly = glitchCircles(poly, 10 / playback, 2 / playback);
+		}
+
+		float noise = ofNoise(ofGetElapsedTimef());
+		float soundPos = chordsLoop.getPosition();
+		float noiseVary = 0.9;
+		float min = ofMap(soundPos - noise, 0.0f, 1.0f, 0.0f, -noiseVary);
+		float max = ofMap(soundPos + noise, 0.0f, 1.0f, 0.0f, noiseVary);
+
+		// chordsLoop.setPosition(soundPos += noise); // subtle glitch, start here
+		// chordsLoop.setPosition(ofRandom(min, max)); // gradually increase min / max to move from paused to moving glitch
+	}
+
+	for (int i = 0; i < circlePolys.size(); i++) {
+		circlePaths[i] = getPath(circlePolys[i]);
 	}
 }
 
@@ -261,12 +267,24 @@ void ofApp::keyPressed(int key) {
 		break;
 		// use arrow keys to change the playback
 	case OF_KEY_UP:
-		playback += 0.01;
-		// cut the audio into pieces and populate the fft array
+		// constratin the playback to between 0.2-0.7
+		playback = upperLowerGuard(playback + 0.01, playMax, playMin);
+		// update the playback speed
+		chordsLoop.setSpeed(playback);
 		break;
 	case OF_KEY_DOWN:
-		playback -= 0.01;
-		// cut the audio into pieces and populate the fft array
+		// constratin the playback to between 0.2-0.7
+		playback = upperLowerGuard(playback - 0.01, playMax, playMin);
+		// update the playback speed
+		chordsLoop.setSpeed(playback);
+		break;
+	case OF_KEY_LEFT:
+		volume = upperLowerGuard(volume - 0.01, volMax, volMin);
+		chordsLoop.setVolume(volume);
+		break;
+	case OF_KEY_RIGHT:
+		volume = upperLowerGuard(volume + 0.01, volMax, volMin);
+		chordsLoop.setVolume(volume);
 		break;
 	case 'g':
 		isGlitch = !isGlitch;
@@ -281,15 +299,8 @@ void ofApp::keyPressed(int key) {
 			bands += 1;
 		}
 		break;
-	case 'c':
-		cout << "radii\n";
-
-		for (int i = 0; i < circles.size(); i ++) {
-			cout << i;
-			cout << " ";
-			cout << circles[i].z;
-			cout << "\n";
-		}
+	case OF_KEY_ESC:
+		OF_EXIT_APP(0);
 		break;
 	}
 }

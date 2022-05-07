@@ -49,9 +49,16 @@ public:
 
 	vector<float> fft;
 	float* soundSpectrum;
+	
 	int bands;
+	int bandsMax;
+
+	float volume;
+	float volMin;
+	float volMax;
 
 	float decay;
+	
 	float playback;
 	float playMax;
 	float playMin;
