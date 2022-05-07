@@ -53,7 +53,7 @@ ofPath ofApp::getPath(ofPolyline circlePoly) {
 	return path;
 }
 
-ofPolyline ofApp::glitch(ofPolyline poly, float xVary, float yVary) {
+ofPolyline ofApp::glitchCircles(ofPolyline poly, float xVary, float yVary) {
 	for (auto &point : poly.getVertices()) {
 		point.x += ofMap(sin(ofRandom(ofGetElapsedTimef())), 0.0f, 1.0f, -xVary, xVary);
 		point.y += ofMap(cos(ofRandom(ofGetElapsedTimef())), 0.0f, 1.0f, -yVary, yVary);
@@ -203,8 +203,17 @@ void ofApp::update() {
 
 		if (isGlitch) {
 			for (auto &poly : circlePolys) {
-				poly = glitch(poly, 10 / playback, 2 / playback);
+				poly = glitchCircles(poly, 10 / playback, 2 / playback);
 			}
+
+			float noise = ofNoise(ofGetElapsedTimef());
+			float soundPos = chordsLoop.getPosition();
+			float noiseVary = 0.9;
+			float min = ofMap(soundPos - noise, 0.0f, 1.0f, 0.0f, -noiseVary);
+			float max = ofMap(soundPos + noise, 0.0f, 1.0f, 0.0f, noiseVary);
+
+			// chordsLoop.setPosition(soundPos += noise); // subtle glitch, start here
+			// chordsLoop.setPosition(ofRandom(min, max)); // gradually increase min / max
 		}
 
 		circlePaths[i] = getPath(circlePolys[i]);

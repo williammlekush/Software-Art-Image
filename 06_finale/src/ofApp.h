@@ -18,17 +18,15 @@ public:
 	ofPolyline getPoly(ofVec3f circle, float fft, float playback);
 	ofPath getPath(ofPolyline circlePoly);
 
-	ofPolyline glitch(ofPolyline poly, float xVary, float yVary);
+	ofPolyline glitchCircles(ofPolyline poly, float xVary, float yVary);
 
 	ofColor getKeyColor();
 	ofColor lerpColor(ofColor keyColor, ofColor targetColor);
 	
 	float getDecay(float playback);
-	
-	float upperLowerGuard(float num, float max, float min);
-	
 	float getFftSize(int bands, float playMin, float playMax, float playback);
-	
+
+	float upperLowerGuard(float num, float max, float min);	
 
 	// vector bins for the circle parameters
 	vector<ofVec3f> circles;
