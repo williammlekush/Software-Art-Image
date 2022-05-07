@@ -213,7 +213,7 @@ void ofApp::update() {
 			float max = ofMap(soundPos + noise, 0.0f, 1.0f, 0.0f, noiseVary);
 
 			// chordsLoop.setPosition(soundPos += noise); // subtle glitch, start here
-			// chordsLoop.setPosition(ofRandom(min, max)); // gradually increase min / max
+			// chordsLoop.setPosition(ofRandom(min, max)); // gradually increase min / max to move from paused to moving glitch
 		}
 
 		circlePaths[i] = getPath(circlePolys[i]);
@@ -270,6 +270,26 @@ void ofApp::keyPressed(int key) {
 		break;
 	case 'g':
 		isGlitch = !isGlitch;
+		break;
+	case 'd':
+		if (bands >= 1) {
+			bands -= 1;
+		}
+		break;
+	case 'a':
+		if (bands < 32) {
+			bands += 1;
+		}
+		break;
+	case 'c':
+		cout << "radii\n";
+
+		for (int i = 0; i < circles.size(); i ++) {
+			cout << i;
+			cout << " ";
+			cout << circles[i].z;
+			cout << "\n";
+		}
 		break;
 	}
 }
