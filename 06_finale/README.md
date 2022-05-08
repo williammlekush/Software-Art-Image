@@ -2,11 +2,11 @@
 
 ## Concept
 
-An extension of _lim f(x) = 0_, _C1rclez_ expands that reflection on endless decay to include growth and death. Rather than imply a zero point, the narrative implies an endless cycle from nothing, to bliss, through decay, and back to nothingness. This new loop leaves behind the illusory experience of fate, zooming out to view that experience in the context of the constant cycles in which it occurs. It moves toward a more comforting and empowering conception of time, one in which we are freed from the confines of linearity, which render meaning a constant. Within this cycle, meaning's apparent arbitrariness offers space to define for ourselves how to interpret and respond to our experiences, to redefine it how we wish.
+An extension of _lim f(x) = 0_, _c1rclez_ expands that reflection on endless decay to include growth and death. Rather than imply a zero point, the narrative implies an endless cycle from nothing, to bliss, through decay, and back to nothingness. This new loop leaves behind the illusory experience of fate, zooming out to view that experience in the context of the constant cycles in which it occurs. It moves toward a more comforting and empowering conception of time, one in which we are freed from the confines of linearity, which render meaning a constant. Within this cycle, meaning's apparent arbitrariness offers space to define for ourselves how to interpret and respond to our experiences, to redefine it how we wish.
 
 ## Program
 
-_C1rclez_ corrects the technical issues with _lim f(x) = 0_. Each circle visualizes one band. The frequencies included in these bands expands and contracts depending on the overal distribution of frequencies, approximated through playbackspeed. With clarity on the relationship between the sound and the visuals, non-essential visuals were removed, improving the performance and allowing for the use of `ofPolyline` and `ofPath` to play with the shapes.
+_c1rclez_ corrects the technical issues with _lim f(x) = 0_. Each circle visualizes one band. The frequencies included in these bands expands and contracts depending on the overal distribution of frequencies, approximated through playbackspeed. With clarity on the relationship between the sound and the visuals, non-essential visuals were removed, improving the performance and allowing for the use of `ofPolyline` and `ofPath` to play with the shapes.
 
 ![screenshot_3](https://user-images.githubusercontent.com/56037586/167299600-b6fd6980-8373-4e28-8d09-d55bffba128f.png)
 
