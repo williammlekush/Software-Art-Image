@@ -26,8 +26,10 @@ public:
 	float getDecay(float playback);
 	float getFftSize(int bands, float playMin, float playMax, float playback);
 
-	float upperLowerGuard(float num, float max, float min);	
+	float glitchSound(float soundPlayerPosition, float variation, bool simple);
 
+	float upperLowerGuard(float num, float max, float min);	
+	
 	// vector bins for the circle parameters
 	vector<ofVec3f> circles;
 	vector<ofPolyline> circlePolys;
@@ -64,4 +66,6 @@ public:
 	float playMin;
 
 	bool isGlitch;
+	bool soundGlitchSimple;
+	float soundGlitchVary;
 };

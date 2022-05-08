@@ -108,6 +108,18 @@ float ofApp::getFftSize(int bands, float playMin, float playMax, float playback)
 	return ofMap(bands / playback, bands / playMax, bands / playMin, bands, bands * 3);
 }
 
+float ofApp::glitchSound(float soundPlayerPosition, float variation, bool simple) {
+	float noise = ofNoise(ofGetElapsedTimef());
+
+	if (simple) {
+		return soundPlayerPosition + noise;
+	}
+	else {
+		float min = ofMap(soundPlayerPosition - noise, 0.0f, 1.0f, 0.0f, -variation);
+		float max = ofMap(soundPlayerPosition + noise, 0.0f, 1.0f, 0.0f, variation);
+		return ofRandom(min, max);
+	}
+}
 
 void ofApp::setup() {
 	// number of circles to represent the sound
@@ -129,6 +141,8 @@ void ofApp::setup() {
 	decay = getDecay(playback);
 
 	isGlitch = false;
+	soundGlitchSimple = true;
+	soundGlitchVary = 0.1;
 
 	// resize for efficiency's sake
 	circles.resize(bandsMax);
@@ -210,18 +224,16 @@ void ofApp::update() {
 	}
 
 	if (isGlitch) {
+		chordsLoop.setPosition(glitchSound(
+			chordsLoop.getPosition(), 
+			soundGlitchVary, 
+			soundGlitchSimple));
+
 		for (auto& poly : circlePolys) {
 			poly = glitchCircles(poly, 10 / playback, 2 / playback);
 		}
 
-		float noise = ofNoise(ofGetElapsedTimef());
 		float soundPos = chordsLoop.getPosition();
-		float noiseVary = 0.9;
-		float min = ofMap(soundPos - noise, 0.0f, 1.0f, 0.0f, -noiseVary);
-		float max = ofMap(soundPos + noise, 0.0f, 1.0f, 0.0f, noiseVary);
-
-		// chordsLoop.setPosition(soundPos += noise); // subtle glitch, start here
-		// chordsLoop.setPosition(ofRandom(min, max)); // gradually increase min / max to move from paused to moving glitch
 	}
 
 	for (int i = 0; i < circlePolys.size(); i++) {
@@ -288,6 +300,15 @@ void ofApp::keyPressed(int key) {
 		break;
 	case 'g':
 		isGlitch = !isGlitch;
+		break;
+	case 'c':
+		soundGlitchSimple = !soundGlitchSimple;
+		break;
+	case 't':
+		soundGlitchVary = upperLowerGuard(soundGlitchVary + 0.01f, 1.0f, 0.0f);
+		break;
+	case 'y':
+		soundGlitchVary = upperLowerGuard(soundGlitchVary - 0.01f, 1.0f, 0.1f);
 		break;
 	case 'd':
 		if (bands >= 1) {
