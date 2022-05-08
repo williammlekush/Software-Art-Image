@@ -37,6 +37,9 @@ public:
 
 	vector<ofColor> keyColors;
 	vector<ofColor> colors;
+	
+	ofColor bgColor;
+	ofColor targetBGColor;
 
 	// targets for the transitions
 	vector<ofVec3f> targetCircles;
@@ -66,6 +69,11 @@ public:
 	float playMin;
 
 	bool isGlitch;
+
+	float visGlitchXVary;
+	float visGlitchYVary;
+	float circlesGlitched;
+
 	bool soundGlitchSimple;
 	float soundGlitchVary;
 };

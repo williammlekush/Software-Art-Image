@@ -141,6 +141,11 @@ void ofApp::setup() {
 	decay = getDecay(playback);
 
 	isGlitch = false;
+
+	visGlitchXVary = 10.0f;
+	visGlitchYVary = 2.0f;
+	circlesGlitched = 1;
+
 	soundGlitchSimple = true;
 	soundGlitchVary = 0.1;
 
@@ -174,6 +179,13 @@ void ofApp::setup() {
 		targetCircles[i] = circles[i] = setCirclePos(setCircleR(circles[i], i), i, 1);
 		targetColors[i] = colors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
 	}
+
+	// set the background color to transition cleanly
+	targetBGColor = bgColor = keyColors[0];
+	bgColor.setBrightness(200);
+	bgColor.setSaturation(100);
+
+	ofEnableAlphaBlending();
 }
 
 //--------------------------------------------------------------
@@ -221,6 +233,7 @@ void ofApp::update() {
 
 		// move the colors toward the target colors using lerping
 		colors[i] = colors[i].getLerped(targetColors[i], speed);
+		bgColor = bgColor.getLerped(targetBGColor, speed);
 	}
 
 	if (isGlitch) {
@@ -229,8 +242,13 @@ void ofApp::update() {
 			soundGlitchVary, 
 			soundGlitchSimple));
 
-		for (auto& poly : circlePolys) {
-			poly = glitchCircles(poly, 10 / playback, 2 / playback);
+		for (int i = 0; i < circlesGlitched; i ++) {
+			ofPolyline &poly = circlePolys[i];
+			poly = glitchCircles(
+				poly,
+				visGlitchXVary / playback,
+				visGlitchYVary / playback
+			);
 		}
 
 		float soundPos = chordsLoop.getPosition();
@@ -243,15 +261,7 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	// set the background color to transition cleanly
-	ofColor bgColor = keyColors[0];
-	bgColor.setBrightness(200);
-	bgColor.setSaturation(100);
 	ofBackground(bgColor);
-	ofEnableAlphaBlending();
-
-	// draw the circles with a high resolution
-	ofSetCircleResolution(100);
 	for (int i = bands - 1; i > -1; i--) {
 		ofPath path = circlePaths[i];
 		path.setFillColor(colors[i]);
@@ -271,6 +281,10 @@ void ofApp::keyPressed(int key) {
 			targetCircles[i] = setCirclePos(targetCircles[i], i, ofGetElapsedTimef()); // use elapsed time to offset the noise seed
 			targetColors[i] = lerpColor(keyColors[i], keyColors[i + 1]);
 		}
+		// set the background color to transition cleanly
+		targetBGColor = keyColors[0];
+		targetBGColor.setBrightness(200);
+		targetBGColor.setSaturation(100);
 		break;
 		// when s is pressed, save the screen
 	case 's':
@@ -301,13 +315,24 @@ void ofApp::keyPressed(int key) {
 	case 'g':
 		isGlitch = !isGlitch;
 		break;
+	case 'u':
+		circlesGlitched = upperLowerGuard(circlesGlitched + 1, bands, 0);
+		break;
+	case 'y':
+		visGlitchXVary = upperLowerGuard(visGlitchXVary + 0.1, 100, 10);
+		visGlitchYVary = upperLowerGuard(visGlitchYVary + 0.02, 20, 2);
+		break;
+	case 't':
+		visGlitchXVary = upperLowerGuard(visGlitchXVary - 0.1, 100, 10);
+		visGlitchYVary = upperLowerGuard(visGlitchYVary - 0.02, 20, 2);
+		break;
 	case 'c':
 		soundGlitchSimple = !soundGlitchSimple;
 		break;
-	case 't':
+	case 'b':
 		soundGlitchVary = upperLowerGuard(soundGlitchVary + 0.01f, 1.0f, 0.0f);
 		break;
-	case 'y':
+	case 'v':
 		soundGlitchVary = upperLowerGuard(soundGlitchVary - 0.01f, 1.0f, 0.1f);
 		break;
 	case 'd':
@@ -319,6 +344,18 @@ void ofApp::keyPressed(int key) {
 		if (bands < 32) {
 			bands += 1;
 		}
+		break;
+	case 'k':
+		volume = volMin;
+		playback = playMin;
+		isGlitch = false;
+		bands = 0;
+		bgColor = ofColor(0);
+		circlesGlitched = 0;
+		soundGlitchSimple = true;
+		soundGlitchVary = 0.1;
+		visGlitchXVary = 10;
+		visGlitchYVary = 2;
 		break;
 	case OF_KEY_ESC:
 		OF_EXIT_APP(0);
