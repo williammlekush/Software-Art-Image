@@ -11,69 +11,84 @@ public:
 
 	void keyPressed(int key);
 
-	// see ofApp for PIO docs
+	// see ofApp.cpp for IPO docs
+
+	// circle parameter manipulation
 	ofVec3f setCirclePos(ofVec3f circle, int id, float offset);
 	ofVec3f setCircleR(ofVec3f circle, int id);
 
+	// circle drawing utilities
 	ofPolyline getPoly(ofVec3f circle, float fft, float playback);
 	ofPath getPath(ofPolyline circlePoly);
 
-	ofPolyline glitchCircles(ofPolyline poly, float xVary, float yVary);
+	// visual glitching utitility
+	ofPolyline glitchCircle(ofPolyline poly, float xVary, float yVary);
 
+	// color manipulation
 	ofColor getKeyColor();
 	ofColor lerpColor(ofColor keyColor, ofColor targetColor);
 	
+	// sound utilities
 	float getDecay(float playback);
 	float getFftSize(int bands, float playMin, float playMax, float playback);
 
+	// sound glitching utility
 	float glitchSound(float soundPlayerPosition, float variation, bool simple);
 
+	// calculation utility
 	float upperLowerGuard(float num, float max, float min);	
 	
-	// vector bins for the circle parameters
-	vector<ofVec3f> circles;
-	vector<ofPolyline> circlePolys;
-	vector<ofPath> circlePaths;
+	// bins for circle parameters
+	vector<ofVec3f> circles;		// vectors to hold position and radius
+	vector<ofPolyline> circlePolys; // polys to manipulate point-by-point
+	vector<ofPath> circlePaths;		// paths to draw filled circles
 
+	// bins for circle colors
 	vector<ofColor> keyColors;
 	vector<ofColor> colors;
-	
-	ofColor bgColor;
-	ofColor targetBGColor;
 
-	// targets for the transitions
+	// bins for bacground color
+	ofColor bgColor;
+
+	// targets for the visual transitions
 	vector<ofVec3f> targetCircles;
 	vector<ofColor> targetColors;
-
+	ofColor targetBGColor;
 
 	// for screenshots
 	ofImage screenshot;
 
 	// for sound looping
-	ofSoundPlayer chordsLoop;
+	ofSoundPlayer loop;
 
+	// for dividing up the sound to be visualized
 	vector<float> fft;
 	float* soundSpectrum;
-	
 	int bands;
 	int bandsMax;
 
+	// volume parameters
 	float volume;
 	float volMin;
 	float volMax;
-
-	float decay;
 	
+	// for ensuring variance in the visuals
+	float decay;
+
+	// playback parameters	
 	float playback;
 	float playMax;
 	float playMin;
 
+	// bool for glitch check
 	bool isGlitch;
 
-	float visGlitchXVary;
-	float visGlitchYVary;
-	float circlesGlitched;
+	// visual glitching parameters
+	float visGlitchXVary;		// x shift range of points
+	float visGlitchYVary;		// y shift range of points
+	float circlesGlitched;		// number of circles to glitch
 
-	bool soundGlitchSimple;
-	float soundGlitchVary;
+	// sound glitching parameters
+	bool soundGlitchSubtle;		// subtle or obnoxious glitch
+	float soundGlitchVary;		// position shift range of obnoxious glitch
 };
