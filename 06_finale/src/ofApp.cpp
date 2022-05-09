@@ -452,8 +452,8 @@ void ofApp::keyPressed(int key) {
 		break;
 		// press 'k' to kill the visualization, reset everything
 	case 'k':
-		volume = volMin;
-		playback = playMin;
+		loop.setVolume(volMin);
+		loop.setPlayback(playMin);
 		isGlitch = false;
 		bands = 0;
 		bgColor = ofColor(0);
